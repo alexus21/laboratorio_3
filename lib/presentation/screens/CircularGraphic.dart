@@ -24,12 +24,14 @@ class _CirculargraphicState extends State<Circulargraphic> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text('Gráfico circular de tus gastos según categorías',
+                style: TextStyle(fontSize: 20)),
             PieChart(
               dataMap: {
-                'Flutter': 5,
-                'React': 3,
-                'Xamarin': 2,
-                'Ionic': 2,
+                'Alimentacion': 5,
+                'Transporte': 3,
+                'Entretenimiento': 2,
+                'Vicios': 2,
               },
               chartType: ChartType.ring,
               chartRadius: 200,
