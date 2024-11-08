@@ -28,8 +28,6 @@ class _ViewexpenditureState extends State<Viewexpenditure> {
             Text('Monto: US \$1000'),
             Text('Categoría: alimentación'),
             Text('Descripción: Eva María se fue a la playa'),
-            Icon(Icons.money),
-            Icon(Icons.delete),
           ],
         ),
       ),
