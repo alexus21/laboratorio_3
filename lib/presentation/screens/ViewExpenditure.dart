@@ -18,7 +18,7 @@ class _ViewexpenditureState extends State<Viewexpenditure> {
     'Vicios'
   ];
   String? _selectedCategory;
-  final TextEditingController _amountController = TextEditingController(text: '\$350');
+  final TextEditingController _amountController = TextEditingController(text: '350');
   final TextEditingController _descriptionController = TextEditingController(text: 'Johnny Walker Blue Label');
   final TextEditingController _dateController = TextEditingController();
 

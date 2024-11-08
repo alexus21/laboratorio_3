@@ -12,7 +12,7 @@ class Customlimit extends StatefulWidget {
 }
 
 class _CustomlimitState extends State<Customlimit> {
-  final TextEditingController _customLimitController = TextEditingController(text: '\$350');
+  final TextEditingController _customLimitController = TextEditingController(text: '350');
 
   @override
   void dispose() {
