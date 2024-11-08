@@ -12,6 +12,7 @@ dependencies:
   intl: ^0.17.0
   toastification:
   pie_chart: ^5.4.0
+  postgres:
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laboratorio_3/presentation/Handler/ConnectionHandler.dart';
 
 import '../widget/Drawer.dart';
 import '../widget/ListView.dart';
@@ -13,6 +14,13 @@ class Mainscreen extends StatefulWidget {
 class _MainscreenState extends State<Mainscreen> {
   String? selectedFilter;
   Widget? widgetToShow;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    connectDatabase();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,4 +146,10 @@ class _MainscreenState extends State<Mainscreen> {
       );
     }
   }
+}
+
+connectDatabase() async {
+  final conn = DatabaseHandler(host: 'localhost', database: 'db_gastos', username: 'postgres', password: 'password');
+  await conn.connect();
+  await conn.close();
 }
