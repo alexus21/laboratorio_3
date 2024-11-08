@@ -75,8 +75,18 @@ class _MainscreenState extends State<Mainscreen> {
   }
 
   Widget showCategoriesFilter(String value) {
-    final List<String> categories = ['Alimentacion', 'Transporte', 'Entretenimiento', 'Vicios'];
-    final List<String> fechas = ['9/11/2001', '25/12/2000', '13/02/2001', '31/12/2001'];
+    final List<String> categories = [
+      'Alimentacion',
+      'Transporte',
+      'Entretenimiento',
+      'Vicios'
+    ];
+    final List<String> fechas = [
+      '9/11/2001',
+      '25/12/2000',
+      '13/02/2001',
+      '31/12/2001'
+    ];
 
     if (value == "Categoria") {
       return Column(
@@ -103,23 +113,28 @@ class _MainscreenState extends State<Mainscreen> {
         ],
       );
     } else {
-      return DropdownButtonFormField<String>(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Fecha',
-        ),
-        value: null,
-        items: fechas.map((String category) {
-          return DropdownMenuItem<String>(
-            value: category,
-            child: Text(category),
-          );
-        }).toList(),
-        onChanged: (String? newValue) {
-          setState(() {
-            // Handle the new value if needed
-          });
-        },
+      return Column(
+        children: <Widget>[
+          DropdownButtonFormField<String>(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Fecha',
+            ),
+            value: null,
+            items: fechas.map((String category) {
+              return DropdownMenuItem<String>(
+                value: category,
+                child: Text(category),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                // Handle the new value if needed
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+        ],
       );
     }
   }
