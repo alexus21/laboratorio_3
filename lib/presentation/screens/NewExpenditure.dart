@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../widget/Drawer.dart';
+import 'Home.dart';
 
 class Newexpenditure extends StatefulWidget {
   const Newexpenditure({super.key});
@@ -9,10 +11,16 @@ class Newexpenditure extends StatefulWidget {
 }
 
 class _NewexpenditureState extends State<Newexpenditure> {
-  final List<String> _categories = ['Alimentacion', 'Transporte', 'Entretenimiento', 'Vicios'];
+  final List<String> _categories = [
+    'Alimentacion',
+    'Transporte',
+    'Entretenimiento',
+    'Vicios'
+  ];
   String? _selectedCategory;
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
   @override
   void dispose() {
@@ -36,22 +44,30 @@ class _NewexpenditureState extends State<Newexpenditure> {
       return;
     }
 
-    if(_selectedCategory == null) {
+    if (_selectedCategory == null) {
       _showErrorDialog('Debe seleccionar una categoría.');
       return;
     }
 
-    if(description.isEmpty) {
+    if (description.isEmpty) {
       _showErrorDialog('La descripción no puede estar vacía.');
       return;
     }
 
-    if(description.length < 5) {
+    if (description.length < 5) {
       _showErrorDialog('La descripción debe tener al menos 5 caracteres.');
       return;
     }
 
-    Navigator.pop(context);
+    // Si a fecha es futura:
+    DateTime now = DateTime.now();
+    DateTime date = DateFormat('dd/MM/yyyy').parse(_dateController.text);
+    if (date.isAfter(now)) {
+      _showErrorDialog('La fecha no puede ser futura.');
+      return;
+    }
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
   }
 
   void _showErrorDialog(String message) {
@@ -88,11 +104,13 @@ class _NewexpenditureState extends State<Newexpenditure> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: <Widget>[
-              const Text('Ingrese los datos del gasto', style: TextStyle(fontSize: 20)),
+              const Text('Ingrese los datos del gasto',
+                  style: TextStyle(fontSize: 20)),
               const SizedBox(height: 50),
-              const TextField(
+              TextField(
+                controller: _amountController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Monto',
                 ),
@@ -117,19 +135,35 @@ class _NewexpenditureState extends State<Newexpenditure> {
                 },
               ),
               const SizedBox(height: 20),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _descriptionController,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Descripción',
                 ),
               ),
               const SizedBox(height: 20),
-              const TextField(
-                keyboardType: TextInputType.datetime,
-                decoration: InputDecoration(
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Fecha',
                 ),
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    setState(() {
+                      _dateController.text =
+                          DateFormat('dd/MM/yyyy').format(pickedDate);
+                    });
+                  }
+                },
+                controller: _dateController,
               ),
               const SizedBox(height: 20),
               ElevatedButton(

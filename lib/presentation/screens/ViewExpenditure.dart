@@ -1,9 +1,6 @@
-/*Ver gastos*/
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
-
 import '../widget/Drawer.dart';
 
 class Viewexpenditure extends StatefulWidget {
@@ -21,10 +18,76 @@ class _ViewexpenditureState extends State<Viewexpenditure> {
     'Vicios'
   ];
   String? _selectedCategory;
-  final TextEditingController _amountController =
-      TextEditingController(text: '\$350');
-  TextEditingController _descriptionController =
-      TextEditingController(text: 'Johnny Walker Blue Label');
+  final TextEditingController _amountController = TextEditingController(text: '\$350');
+  final TextEditingController _descriptionController = TextEditingController(text: 'Johnny Walker Blue Label');
+  final TextEditingController _dateController = TextEditingController();
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _descriptionController.dispose();
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  void validateFields() {
+    String amount = _amountController.text;
+    String description = _descriptionController.text;
+
+    if (amount.isEmpty) {
+      _showErrorDialog('El monto no puede estar vacío.');
+      return;
+    }
+
+    if (double.parse(amount) < 0) {
+      _showErrorDialog('El monto no puede ser menor que 0.');
+      return;
+    }
+
+    if (_selectedCategory == null) {
+      _showErrorDialog('Debe seleccionar una categoría.');
+      return;
+    }
+
+    if (description.isEmpty) {
+      _showErrorDialog('La descripción no puede estar vacía.');
+      return;
+    }
+
+    if (description.length < 5) {
+      _showErrorDialog('La descripción debe tener al menos 5 caracteres.');
+      return;
+    }
+
+    DateTime now = DateTime.now();
+    DateTime date = DateFormat('dd/MM/yyyy').parse(_dateController.text);
+    if (date.isAfter(now)) {
+      _showErrorDialog('La fecha no puede ser futura.');
+      return;
+    }
+
+    Navigator.pop(context);
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +142,35 @@ class _ViewexpenditureState extends State<Viewexpenditure> {
                 padding: const EdgeInsets.only(top: 20),
                 child: TextField(
                   controller: _descriptionController,
-                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Descripción',
                   ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Fecha',
+                  ),
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2101),
+                    );
+                    if (pickedDate != null) {
+                      setState(() {
+                        _dateController.text =
+                            DateFormat('dd/MM/yyyy').format(pickedDate);
+                      });
+                    }
+                  },
+                  controller: _dateController,
                 ),
               ),
               Padding(
@@ -94,14 +181,7 @@ class _ViewexpenditureState extends State<Viewexpenditure> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          toastification.show(
-                            style: ToastificationStyle.minimal,
-                            primaryColor: Colors.green,
-                            type: ToastificationType.success,
-                            context: context,
-                            title: const Text('Gasto actualizado'),
-                            autoCloseDuration: const Duration(seconds: 3),
-                          );
+                          validateFields();
                         });
                       },
                       style: ElevatedButton.styleFrom(
@@ -116,7 +196,6 @@ class _ViewexpenditureState extends State<Viewexpenditure> {
                           toastification.show(
                             style: ToastificationStyle.minimal,
                             primaryColor: Colors.redAccent,
-                            // Use a softer red color
                             type: ToastificationType.success,
                             context: context,
                             title: const Text('Gasto eliminado'),

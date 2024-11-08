@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:laboratorio_3/presentation/screens/CircularGraphic.dart';
+import 'package:laboratorio_3/presentation/screens/CustomLimit.dart';
 import 'package:laboratorio_3/presentation/screens/ExpanditurePreviousMonths.dart';
 import 'package:laboratorio_3/presentation/screens/ExpanditureReport.dart';
 import 'package:laboratorio_3/presentation/screens/MainScreen.dart';
@@ -48,6 +50,20 @@ Drawer buildDrawer(BuildContext context) {
           title: const Text('Reporte de gastos anteriores'),
           onTap: () {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Expanditurepreviousmonths()));
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.circle_outlined),
+          title: const Text('Gráfico de gastos'),
+          onTap: () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Circulargraphic()));
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.wallet_giftcard),
+          title: const Text('Mi límite de gastos'),
+          onTap: () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Customlimit()));
           },
         ),
       ],
