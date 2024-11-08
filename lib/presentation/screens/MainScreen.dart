@@ -149,7 +149,9 @@ class _MainscreenState extends State<Mainscreen> {
 }
 
 connectDatabase() async {
-  final conn = DatabaseHandler(host: 'localhost', database: 'db_gastos', username: 'postgres', password: 'password');
+  String host = "c9pv5s2sq0i76o.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com";
+
+  final conn = DatabaseHandler(host: host, database: 'dc0qjd11dtes3o', username: 'u9fj19cl14b51r', password: 'pbc84b116581957c694c8e85642e9f65dabd651a4a8db3c4c2254b89328384007');
   await conn.connect();
   await conn.close();
 }
