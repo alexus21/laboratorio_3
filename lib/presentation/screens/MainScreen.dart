@@ -11,6 +11,9 @@ class Mainscreen extends StatefulWidget {
 }
 
 class _MainscreenState extends State<Mainscreen> {
+  String? selectedFilter;
+  Widget? widgetToShow;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +27,36 @@ class _MainscreenState extends State<Mainscreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const Text("Filtrar por:", style: TextStyle(fontSize: 20)),
+            RadioListTile<String>(
+              title: const Text('Categoría'),
+              value: "Categoria",
+              groupValue: selectedFilter,
+              onChanged: (String? value) {
+                setState(() {
+                  selectedFilter = value;
+                  widgetToShow = showCategoriesFilter(value!);
+                });
+              },
+            ),
+            RadioListTile<String>(
+              title: const Text('Fecha'),
+              value: "Fecha",
+              groupValue: selectedFilter,
+              onChanged: (String? value) {
+                setState(() {
+                  selectedFilter = value;
+                  widgetToShow = showCategoriesFilter(value!);
+                });
+              },
+            ),
+            if (widgetToShow != null) widgetToShow!,
             Expanded(
               child: buildListView(context),
             ),
           ],
         ),
       ),
-      // Total de gastos:
       bottomNavigationBar: BottomAppBar(
         child: Container(
           height: 50.0,
@@ -47,5 +73,55 @@ class _MainscreenState extends State<Mainscreen> {
         ),
       ),
     );
+  }
+
+  Widget showCategoriesFilter(String value) {
+    final List<String> categories = ['Alimentacion', 'Transporte', 'Entretenimiento', 'Vicios'];
+    final List<String> fechas = ['09/11/2001', '03/05/2003', '30/03/1850', '01/09/1939'];
+
+    if (value == "Categoria") {
+      return Column(
+        children: <Widget>[
+          DropdownButtonFormField<String>(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Categoría',
+            ),
+            value: null,
+            items: categories.map((String category) {
+              return DropdownMenuItem<String>(
+                value: category,
+                child: Text(category),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                //
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+        ],
+      );
+    } else {
+      return DropdownButtonFormField<String>(
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Fechas',
+        ),
+        value: null,
+        items: fechas.map((String category) {
+          return DropdownMenuItem<String>(
+            value: category,
+            child: Text(category),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          setState(() {
+            //
+          });
+        },
+      );
+    }
   }
 }
